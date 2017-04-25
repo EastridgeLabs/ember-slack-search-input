@@ -29,6 +29,8 @@ export default Ember.Component.extend({
     return prepareConig(get(this, 'configHash'));
   }),
 
+  withSpaces: false,
+
   excludedTokenTypes: ['default', 'modifier-list', 'space'],
   proxyValue: '',
   inputValue: computed({
@@ -284,6 +286,23 @@ export default Ember.Component.extend({
         } else if (get(activeToken, 'type') !== 'date') {
           this.toggleProperty('downClicked');
         }
+      } else if (keyCode ===  KEYS.SPACE) {
+        // e.preventDefault();
+        if (!get(this, 'activeToken')) return;
+        let activeToken = get(this, 'activeToken');
+        let val = target.value;
+        let withSpaces = get(this, 'withSpaces');
+        let inputValue = get(this, 'inputValue');
+        if (withSpaces) {
+          set(this, 'activeToken.value', '\xa0' + get(this, 'activeToken.value') + '\xa0');
+        } else {
+          set(this, 'cursorLocation', target.selectionStart);
+          this.scrollBackground(target.scrollLeft);
+          set(this, 'firstTimeFocus', false);
+        }
+      } else if (keyCode === KEYS.QUOTE) {
+        console.log('White space observer');
+        this.toggleProperty('withSpaces');
       } else {
         run.next(this, function() {
           let val = target.value;

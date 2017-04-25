@@ -10,7 +10,9 @@ export const KEYS = {
   RIGHT: 39,
   DOWN: 40,
   ENTER: 13,
-  TAB: 9
+  TAB: 9,
+  SPACE: 32,
+  QUOTE: 222
 };
 
 export function sanitizeTokens(tokens) {
