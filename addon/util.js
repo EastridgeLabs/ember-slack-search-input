@@ -79,10 +79,12 @@ export function tokenize(text, configHash) {
   let tokens = [];
   let mem = '';
   let i = 0;
+  let numQuotes = 0;
 
   for (i = 0; i <= text.length; i++) {
     var character = text[i];
-    if ((character === ' ' || !character)) {
+    let isInsideQuotes = numQuotes === 1;
+    if ((!isInsideQuotes && character === ' ') || !character) {
       if (mem) {
         tokens.push(Token.create({ configHash, fullText: mem }));
       }
@@ -90,8 +92,12 @@ export function tokenize(text, configHash) {
         tokens.push(Token.create({ configHash, fullText: ' ' }));
       }
       mem = '';
-    } else if (character !== ' ') {
+      numQuotes = 0;
+    } else {
       mem += character;
+      if (character == '"') {
+        numQuotes += 1;
+      }
     }
   }
   return tokens;
